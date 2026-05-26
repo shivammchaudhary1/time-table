@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'; 
 import User from '../models/User.js';
+import envs from '../config/envs.js';
 
-
-const JWT_SECRET = process.env.JWT_SECRET || 'smart-timetable-secret-key-2024';
+const JWT_SECRET = envs.jwt_secret;
 
 const getTokenFromRequest = (req) => {
   const header = req.headers.authorization;

@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
@@ -9,14 +8,13 @@ import coursesRouter from "./routes/courses.js";
 import constraintsRouter from "./routes/constraints.js";
 import timetableRouter from "./routes/timetable.js";
 import roomsRouter from "./routes/rooms.js";
+import envs from "./config/envs.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = envs.port;
 
 // CORS Configuration
 const corsOptions = {
@@ -29,16 +27,13 @@ const corsOptions = {
     ];
 
     // Add environment-based URLs
-    if (process.env.FRONTEND_URL) {
-      allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/+$/, "")); // Remove trailing slash
-    }
-    if (process.env.CLIENT_URL) {
-      allowedOrigins.push(process.env.CLIENT_URL.replace(/\/+$/, "")); // Remove trailing slash
+    if (envs.client_url) {
+      allowedOrigins.push(envs.client_url.replace(/\/+$/, "")); // Remove trailing slash
     }
 
     // In production, allow any origin for CORS preflight (OPTIONS requests work)
     // Security is handled by token validation
-    if (process.env.NODE_ENV === "production") {
+    if (envs.node_env === "production") {
       callback(null, true);
     } else if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -83,7 +78,7 @@ app.get("/api/health", (req, res) => {
 });
 
 // Serve frontend in production
-if (process.env.NODE_ENV === "production") {
+if (envs.node_env === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")));
 
   app.get("*", (req, res) => {
