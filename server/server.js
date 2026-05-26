@@ -30,6 +30,10 @@ app.use((req, res, next) => {
 // Connect to MongoDB
 connectDB();
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Smart Timetable API");
+});
+
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/courses", require("./routes/courses"));
