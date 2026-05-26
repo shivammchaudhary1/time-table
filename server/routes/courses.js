@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import Course from '../models/Course.js';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
-const Course = require('../models/Course');
-const auth = require('../middleware/auth');
 
 // All routes require authentication
 router.use(auth);
@@ -52,4 +53,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

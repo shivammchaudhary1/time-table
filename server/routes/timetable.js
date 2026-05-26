@@ -1,12 +1,13 @@
-const express = require('express');
+import express from 'express';
+import Course from '../models/Course.js';
+import Constraint from '../models/Constraint.js';
+import Timetable from '../models/Timetable.js';
+import Room from '../models/Room.js';
+import Scheduler from '../services/scheduler.js';
+import ConflictDetector from '../services/conflictDetector.js';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
-const Course = require('../models/Course');
-const Constraint = require('../models/Constraint');
-const Timetable = require('../models/Timetable');
-const Room = require('../models/Room');
-const Scheduler = require('../services/scheduler');
-const ConflictDetector = require('../services/conflictDetector');
-const auth = require('../middleware/auth');
 
 router.use(auth);
 
@@ -93,4 +94,4 @@ router.get('/conflicts', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

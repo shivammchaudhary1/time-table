@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import Room from '../models/Room.js';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
-const Room = require('../models/Room');
-const auth = require('../middleware/auth');
 
 router.use(auth);
 
@@ -51,4 +52,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

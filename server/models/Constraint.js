@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const constraintSchema = new mongoose.Schema({
   userId: {
@@ -57,4 +57,4 @@ const constraintSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Constraint', constraintSchema);
+export default mongoose.model('Constraint', constraintSchema);

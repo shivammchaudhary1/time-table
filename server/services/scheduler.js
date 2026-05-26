@@ -301,4 +301,4 @@ class Scheduler {
   }
 }
 
-module.exports = Scheduler;
+export default Scheduler;

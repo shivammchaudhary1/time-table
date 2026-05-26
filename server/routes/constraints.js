@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import Constraint from '../models/Constraint.js';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
-const Constraint = require('../models/Constraint');
-const auth = require('../middleware/auth');
 
 router.use(auth);
 
@@ -34,4 +35,4 @@ router.put('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
