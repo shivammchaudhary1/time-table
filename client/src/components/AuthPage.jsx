@@ -1,21 +1,27 @@
-import { useState } from 'react';
-import { register, login } from '../api/api';
-import '../styles/AuthPage.css';
+import { useState, useEffect } from "react";
+import { register, login } from "../api/api";
+import "../styles/AuthPage.css";
 
-export default function AuthPage({ onAuth }) {
-  const [isLogin, setIsLogin] = useState(true);
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
-  const [error, setError] = useState('');
+export default function AuthPage({ onAuth, initialMode = "login", onClose }) {
+  const [isLogin, setIsLogin] = useState(initialMode === "login");
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setIsLogin(initialMode === "login");
+    setForm({ name: "", email: "", password: "" });
+    setError("");
+  }, [initialMode]);
+
   const handleChange = (e) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    setError('');
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
@@ -25,15 +31,20 @@ export default function AuthPage({ onAuth }) {
 
       onAuth(res.data.user);
     } catch (err) {
-      setError(err.response?.data?.error || 'Something went wrong');
+      setError(err.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page auth-modal">
       <div className="auth-card">
+        {onClose && (
+          <button className="auth-close" onClick={onClose} title="Close">
+            ✕
+          </button>
+        )}
         <div className="auth-brand">
           <div className="auth-logo">📅</div>
           <h1 className="auth-title">
@@ -94,23 +105,31 @@ export default function AuthPage({ onAuth }) {
           >
             {loading ? (
               <>
-                <span className="spinner" style={{ width: 16, height: 16, borderWidth: 2 }}></span>
-                {isLogin ? 'Signing in...' : 'Creating account...'}
+                <span
+                  className="spinner"
+                  style={{ width: 16, height: 16, borderWidth: 2 }}
+                ></span>
+                {isLogin ? "Signing in..." : "Creating account..."}
               </>
+            ) : isLogin ? (
+              "🔐 Sign In"
             ) : (
-              isLogin ? '🔐 Sign In' : '🚀 Create Account'
+              "🚀 Create Account"
             )}
           </button>
         </form>
 
         <div className="auth-toggle">
-          {isLogin ? "Don't have an account?" : 'Already have an account?'}
+          {isLogin ? "Don't have an account?" : "Already have an account?"}
           <span
             className="auth-toggle-link"
-            onClick={() => { setIsLogin(!isLogin); setError(''); }}
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setError("");
+            }}
             id="auth-toggle-link"
           >
-            {isLogin ? 'Sign Up' : 'Sign In'}
+            {isLogin ? "Sign Up" : "Sign In"}
           </span>
         </div>
       </div>
