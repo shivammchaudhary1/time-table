@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
 
 const entrySchema = new mongoose.Schema({
   courseId: {
@@ -52,4 +53,4 @@ const timetableSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Timetable', timetableSchema);
+export default mongoose.model('Timetable', timetableSchema);

@@ -1,8 +1,17 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const path = require("path");
-const connectDB = require("./config/db");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
+import authRouter from "./routes/auth.js";
+import coursesRouter from "./routes/courses.js";
+import constraintsRouter from "./routes/constraints.js";
+import timetableRouter from "./routes/timetable.js";
+import roomsRouter from "./routes/rooms.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -62,11 +71,11 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/courses", require("./routes/courses"));
-app.use("/api/constraints", require("./routes/constraints"));
-app.use("/api/timetable", require("./routes/timetable"));
-app.use("/api/rooms", require("./routes/rooms"));
+app.use("/api/auth", authRouter);
+app.use("/api/courses", coursesRouter);
+app.use("/api/constraints", constraintsRouter);
+app.use("/api/timetable", timetableRouter);
+app.use("/api/rooms", roomsRouter);
 
 // Health check
 app.get("/api/health", (req, res) => {

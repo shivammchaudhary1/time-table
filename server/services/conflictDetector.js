@@ -135,4 +135,4 @@ class ConflictDetector {
   }
 }
 
-module.exports = ConflictDetector;
+export default ConflictDetector;

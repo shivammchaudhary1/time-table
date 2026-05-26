@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken'; 
+import User from '../models/User.js';
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'smart-timetable-secret-key-2024';
 
@@ -36,5 +37,5 @@ const auth = async (req, res, next) => {
   }
 };
 
-module.exports = auth;
-module.exports.JWT_SECRET = JWT_SECRET;
+export default auth;
+export { JWT_SECRET };
