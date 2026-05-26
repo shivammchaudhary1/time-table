@@ -16,16 +16,30 @@ const API = axios.create({
   withCredentials: true,
 });
 
-// Log all requests and responses for debugging
+// Request interceptor - Add token to Authorization header
 API.interceptors.request.use((config) => {
   console.log(`🌐 ${config.method?.toUpperCase()} ${config.url}`);
+
+  const token = localStorage.getItem("auth_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+    console.log("✅ Token attached to request");
+  }
+
   return config;
 });
 
-// Handle responses and errors
+// Response interceptor - Handle responses and errors
 API.interceptors.response.use(
   (response) => {
     console.log(`✅ ${response.status} ${response.config.url}`);
+
+    // Save token if returned in response (from login/register)
+    if (response.data?.token) {
+      localStorage.setItem("auth_token", response.data.token);
+      console.log("💾 Token saved to localStorage");
+    }
+
     return response;
   },
   (error) => {
@@ -34,7 +48,8 @@ API.interceptors.response.use(
       error.message,
     );
     if (error.response?.status === 401) {
-      console.warn("🔐 Unauthorized - Token may have expired");
+      console.warn("🔐 Unauthorized - Clearing stored token");
+      localStorage.removeItem("auth_token");
     }
     return Promise.reject(error);
   },
@@ -44,7 +59,10 @@ API.interceptors.response.use(
 export const register = (data) => API.post("/auth/register", data);
 export const login = (data) => API.post("/auth/login", data);
 export const getMe = () => API.get("/auth/me");
-export const logout = () => API.post("/auth/logout");
+export const logout = async () => {
+  localStorage.removeItem("auth_token");
+  return API.post("/auth/logout");
+};
 
 // Courses
 export const getCourses = () => API.get("/courses");
