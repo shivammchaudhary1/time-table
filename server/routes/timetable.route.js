@@ -1,11 +1,11 @@
 import express from 'express';
-import Course from '../models/Course.js';
-import Constraint from '../models/Constraint.js';
-import Timetable from '../models/Timetable.js';
-import Room from '../models/Room.js';
-import Scheduler from '../services/scheduler.js';
-import ConflictDetector from '../services/conflictDetector.js';
-import auth from '../middleware/auth.js';
+import Course from '../models/course.model.js';
+import Constraint from '../models/constraint.model.js';
+import Timetable from '../models/timetable.model.js';
+import Room from '../models/room.model.js';
+import Scheduler from '../services/scheduler.service.js';
+import ConflictDetector from '../services/conflictDetector.service.js';
+import auth from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'; 
-import User from '../models/User.js';
+import User from '../models/user.model.js';
 import envs from '../config/envs.js';
 
 const JWT_SECRET = envs.jwt_secret;

@@ -1,8 +1,8 @@
-import authRouter from "./auth.js";
-import coursesRouter from "./courses.js";
-import constraintsRouter from "./constraints.js";
-import timetableRouter from "./timetable.js";
-import roomsRouter from "./rooms.js";
+import authRouter from "./auth.route.js";
+import coursesRouter from "./courses.route.js";
+import constraintsRouter from "./constraints.route.js";
+import timetableRouter from "./timetable.route.js";
+import roomsRouter from "./rooms.route.js";
 
 export const appRoutes = (app) => {
   app.use('/api/auth', authRouter);
