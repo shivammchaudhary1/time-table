@@ -3,13 +3,7 @@ import cors from 'cors';
 import chalk from 'chalk';
 import connectDB from './config/db.js';
 import envs from './config/envs.js';
-
-// Route imports
-import authRouter from './routes/auth.js';
-import coursesRouter from './routes/courses.js';
-import constraintsRouter from './routes/constraints.js';
-import timetableRouter from './routes/timetable.js';
-import roomsRouter from './routes/rooms.js';
+import { appRoutes } from './routes/app.route.js';
 
 const app = express();
 const PORT = envs.port;
@@ -29,11 +23,7 @@ app.use((req, res, next) => {
 connectDB();
 
 // ========== Routes ==========
-app.use('/api/auth', authRouter);
-app.use('/api/courses', coursesRouter);
-app.use('/api/constraints', constraintsRouter);
-app.use('/api/timetable', timetableRouter);
-app.use('/api/rooms', roomsRouter);
+appRoutes(app);
 
 // ========== Health Check ==========
 app.get('/api/health', (req, res) => {
