@@ -68,15 +68,20 @@ export default function TimetableGrid({ timetable, constraints, conflicts }) {
         </h2>
       </div>
       <div className="timetable-grid-container">
-        <div className="timetable-grid" style={{ gridTemplateColumns: `70px repeat(${activeDays.length}, 1fr)` }}>
+        <div
+          className="timetable-grid"
+          style={{ gridTemplateColumns: `70px repeat(${activeDays.length}, 1fr)` }}
+        >
           {/* Header row */}
           <div className="grid-header-cell time-col">Time</div>
-          {activeDays.map(day => (
-            <div className="grid-header-cell" key={day}>{day.slice(0, 3).toUpperCase()}</div>
+          {activeDays.map((day) => (
+            <div className="grid-header-cell" key={day}>
+              {day.slice(0, 3).toUpperCase()}
+            </div>
           ))}
 
           {/* Body rows */}
-          {hours.map(hour => {
+          {hours.map((hour) => {
             const isLunch = hour >= lunchStart && hour < lunchEnd;
 
             if (isLunch) {
@@ -84,7 +89,7 @@ export default function TimetableGrid({ timetable, constraints, conflicts }) {
                 <div className="grid-time-cell" key={`time-${hour}`} style={{ minHeight: 40 }}>
                   {hour}:00
                 </div>,
-                ...activeDays.map(day => (
+                ...activeDays.map((day) => (
                   <div className="grid-lunch-cell" key={`${day}-${hour}`}>
                     <span className="lunch-label">🍽 Lunch</span>
                   </div>
@@ -96,13 +101,13 @@ export default function TimetableGrid({ timetable, constraints, conflicts }) {
               <div className="grid-time-cell" key={`time-${hour}`}>
                 {hour}:00
               </div>,
-              ...activeDays.map(day => {
+              ...activeDays.map((day) => {
                 const key = `${day}_${hour}`;
                 const cellEntries = grid[key] || [];
 
                 return (
                   <div className="grid-cell" key={key}>
-                    {cellEntries.map(entry => {
+                    {cellEntries.map((entry) => {
                       const entryKey = `${entry.courseId || entry.courseName}_${entry.day}_${entry.startSlot}`;
                       // Only render the block in its first (top) cell
                       if (hour !== entry.startSlot) return null;
@@ -128,8 +133,12 @@ export default function TimetableGrid({ timetable, constraints, conflicts }) {
                         >
                           <div className="grid-entry-name">{entry.courseName}</div>
                           <div className="grid-entry-instructor">{entry.instructor}</div>
-                          {entry.roomName && <div className="grid-entry-time">📍 {entry.roomName}</div>}
-                          <div className="grid-entry-time">{entry.startSlot}:00 – {entry.endSlot}:00</div>
+                          {entry.roomName && (
+                            <div className="grid-entry-time">📍 {entry.roomName}</div>
+                          )}
+                          <div className="grid-entry-time">
+                            {entry.startSlot}:00 – {entry.endSlot}:00
+                          </div>
                         </div>
                       );
                     })}
@@ -145,7 +154,8 @@ export default function TimetableGrid({ timetable, constraints, conflicts }) {
       {timetable.unplaced && timetable.unplaced.length > 0 && (
         <div className="unplaced-warning">
           <div className="unplaced-title">
-            ⚠️ {timetable.unplaced.length} session{timetable.unplaced.length > 1 ? 's' : ''} could not be placed
+            ⚠️ {timetable.unplaced.length} session{timetable.unplaced.length > 1 ? 's' : ''} could
+            not be placed
           </div>
           {timetable.unplaced.map((u, i) => (
             <div className="unplaced-item" key={i}>

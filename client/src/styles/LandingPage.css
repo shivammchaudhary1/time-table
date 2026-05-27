@@ -25,7 +25,7 @@
 }
 
 .hero::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 600px;
   height: 600px;
@@ -36,15 +36,11 @@
 }
 
 .hero::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 500px;
   height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(168, 85, 247, 0.1) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
   bottom: -100px;
   left: -100px;
   pointer-events: none;
@@ -244,11 +240,7 @@
 /* ========== HOW IT WORKS ========== */
 .how-it-works {
   padding: 80px 36px;
-  background: linear-gradient(
-    160deg,
-    var(--bg-primary) 0%,
-    var(--bg-tertiary) 100%
-  );
+  background: linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
 }
 
 .steps {
@@ -330,15 +322,11 @@
 }
 
 .cta::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 400px;
   height: 400px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   top: -100px;
   right: -100px;
   pointer-events: none;

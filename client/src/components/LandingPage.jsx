@@ -1,41 +1,41 @@
-import { useState } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import "../styles/LandingPage.css";
+import { useState } from 'react';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import '../styles/LandingPage.css';
 
 export default function LandingPage({ onShowAuth }) {
-  const [activeTab, setActiveTab] = useState("login");
+  const [activeTab, setActiveTab] = useState('login');
 
   const features = [
     {
-      icon: "⚡",
-      title: "AI-Powered",
-      description: "Intelligent algorithm optimizes schedules automatically",
+      icon: '⚡',
+      title: 'AI-Powered',
+      description: 'Intelligent algorithm optimizes schedules automatically',
     },
     {
-      icon: "⚙️",
-      title: "Smart Constraints",
-      description: "Set flexible time and resource constraints",
+      icon: '⚙️',
+      title: 'Smart Constraints',
+      description: 'Set flexible time and resource constraints',
     },
     {
-      icon: "👥",
-      title: "Multi-Room Support",
-      description: "Manage multiple rooms and venues efficiently",
+      icon: '👥',
+      title: 'Multi-Room Support',
+      description: 'Manage multiple rooms and venues efficiently',
     },
     {
-      icon: "🎯",
-      title: "Conflict Detection",
-      description: "Automatically identifies and resolves conflicts",
+      icon: '🎯',
+      title: 'Conflict Detection',
+      description: 'Automatically identifies and resolves conflicts',
     },
     {
-      icon: "📊",
-      title: "Real-time Analytics",
-      description: "Track scheduling performance and statistics",
+      icon: '📊',
+      title: 'Real-time Analytics',
+      description: 'Track scheduling performance and statistics',
     },
     {
-      icon: "📥",
-      title: "Export Options",
-      description: "Export timetables in multiple formats",
+      icon: '📥',
+      title: 'Export Options',
+      description: 'Export timetables in multiple formats',
     },
   ];
 
@@ -53,21 +53,14 @@ export default function LandingPage({ onShowAuth }) {
               AI-Powered Scheduling
             </h1>
             <p className="hero-subtitle">
-              Generate optimal timetables effortlessly with our intelligent
-              scheduling engine. Manage courses, rooms, and constraints with
-              ease.
+              Generate optimal timetables effortlessly with our intelligent scheduling engine.
+              Manage courses, rooms, and constraints with ease.
             </p>
             <div className="hero-actions">
-              <button
-                className="btn btn-primary btn-lg"
-                onClick={() => onShowAuth("signup")}
-              >
+              <button className="btn btn-primary btn-lg" onClick={() => onShowAuth('signup')}>
                 🚀 Get Started
               </button>
-              <button
-                className="btn btn-secondary btn-lg"
-                onClick={() => onShowAuth("login")}
-              >
+              <button className="btn btn-secondary btn-lg" onClick={() => onShowAuth('login')}>
                 🔐 Sign In
               </button>
             </div>
@@ -138,10 +131,7 @@ export default function LandingPage({ onShowAuth }) {
         <div className="cta-content">
           <h2>Ready to revolutionize your scheduling?</h2>
           <p>Start creating intelligent timetables today</p>
-          <button
-            className="btn btn-primary btn-lg"
-            onClick={() => onShowAuth("signup")}
-          >
+          <button className="btn btn-primary btn-lg" onClick={() => onShowAuth('signup')}>
             Create Free Account
           </button>
         </div>

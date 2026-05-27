@@ -27,9 +27,17 @@ class ConflictDetector {
 
         let type = 'time_overlap';
         let severity = 'medium';
-        if (sameRoom) { type = 'room_double_booking'; severity = 'high'; }
-        if (sameInstructor) { type = 'instructor_clash'; severity = 'high'; }
-        if (sameCourse) { type = 'same_course_overlap'; }
+        if (sameRoom) {
+          type = 'room_double_booking';
+          severity = 'high';
+        }
+        if (sameInstructor) {
+          type = 'instructor_clash';
+          severity = 'high';
+        }
+        if (sameCourse) {
+          type = 'same_course_overlap';
+        }
 
         if (overlaps) {
           conflicts.push({
@@ -105,7 +113,7 @@ class ConflictDetector {
           if (overlapsLunch) continue;
 
           // Check if this slot is free
-          const wouldConflict = entries.some(e => {
+          const wouldConflict = entries.some((e) => {
             if (e._id && e._id.toString() === entryB.id?.toString()) return false; // Skip self
             if (e.day !== day) return false;
             return !(hour + duration <= e.startSlot || e.endSlot <= hour);
@@ -122,7 +130,7 @@ class ConflictDetector {
       suggestions.push({
         conflict,
         moveEntry: entryB.courseName,
-        alternatives: alternativeSlots.map(s => ({
+        alternatives: alternativeSlots.map((s) => ({
           day: s.day,
           time: `${s.startSlot}:00 – ${s.endSlot}:00`,
           startSlot: s.startSlot,

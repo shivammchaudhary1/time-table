@@ -20,11 +20,13 @@ class Scheduler {
    */
   generateDomain(course) {
     const domain = [];
-    const { dayStartHour, dayEndHour, lunchBreakStart, lunchBreakEnd, activeDays, blockedSlots } = this.constraints;
+    const { dayStartHour, dayEndHour, lunchBreakStart, lunchBreakEnd, activeDays, blockedSlots } =
+      this.constraints;
 
-    const days = course.preferredDays && course.preferredDays.length > 0
-      ? course.preferredDays.filter(d => activeDays.includes(d))
-      : activeDays;
+    const days =
+      course.preferredDays && course.preferredDays.length > 0
+        ? course.preferredDays.filter((d) => activeDays.includes(d))
+        : activeDays;
 
     // If rooms exist, iterate over rooms; otherwise use null room
     const roomList = this.rooms.length > 0 ? this.rooms : [null];
@@ -34,7 +36,9 @@ class Scheduler {
         // Skip if room isn't available on this day
         if (room && room.availableDays && !room.availableDays.includes(day)) continue;
 
-        const roomStart = room ? Math.max(dayStartHour, room.availableFrom || dayStartHour) : dayStartHour;
+        const roomStart = room
+          ? Math.max(dayStartHour, room.availableFrom || dayStartHour)
+          : dayStartHour;
         const roomEnd = room ? Math.min(dayEndHour, room.availableTo || dayEndHour) : dayEndHour;
 
         for (let hour = roomStart; hour <= roomEnd - course.duration; hour++) {
@@ -51,7 +55,7 @@ class Scheduler {
           // Check if any slot is blocked
           let isBlocked = false;
           for (let h = hour; h < hour + course.duration; h++) {
-            if (blockedSlots && blockedSlots.some(bs => bs.day === day && bs.hour === h)) {
+            if (blockedSlots && blockedSlots.some((bs) => bs.day === day && bs.hour === h)) {
               isBlocked = true;
               break;
             }
@@ -62,7 +66,10 @@ class Scheduler {
           let score = 0;
           if (course.preferredDays && course.preferredDays.includes(day)) score += 10;
           if (course.preferredTimeStart && course.preferredTimeEnd) {
-            if (hour >= course.preferredTimeStart && hour + course.duration <= course.preferredTimeEnd) {
+            if (
+              hour >= course.preferredTimeStart &&
+              hour + course.duration <= course.preferredTimeEnd
+            ) {
               score += 20;
             }
           }
@@ -98,22 +105,28 @@ class Scheduler {
         const gap = breakBetweenClasses || 0;
 
         // Room double-booking: same room, overlapping time
-        if (entry.roomId && placed.roomId &&
-            entry.roomId.toString() === placed.roomId.toString()) {
-          if (!(entry.endSlot + gap <= placed.startSlot || placed.endSlot + gap <= entry.startSlot)) {
+        if (entry.roomId && placed.roomId && entry.roomId.toString() === placed.roomId.toString()) {
+          if (
+            !(entry.endSlot + gap <= placed.startSlot || placed.endSlot + gap <= entry.startSlot)
+          ) {
             return false;
           }
         }
 
         // If no rooms defined, check general time overlap
         if (!entry.roomId && !placed.roomId) {
-          if (!(entry.endSlot + gap <= placed.startSlot || placed.endSlot + gap <= entry.startSlot)) {
+          if (
+            !(entry.endSlot + gap <= placed.startSlot || placed.endSlot + gap <= entry.startSlot)
+          ) {
             return false;
           }
         }
 
         // Instructor clash: same instructor at overlapping time (regardless of room)
-        if (placed.instructor === entry.instructor && placed.courseId.toString() !== entry.courseId.toString()) {
+        if (
+          placed.instructor === entry.instructor &&
+          placed.courseId.toString() !== entry.courseId.toString()
+        ) {
           if (!(entry.endSlot <= placed.startSlot || placed.endSlot <= entry.startSlot)) {
             return false;
           }
@@ -123,7 +136,7 @@ class Scheduler {
 
     // Max hours per day check
     const dayHours = placements
-      .filter(p => p.day === entry.day)
+      .filter((p) => p.day === entry.day)
       .reduce((sum, p) => sum + (p.endSlot - p.startSlot), 0);
     if (dayHours + (entry.endSlot - entry.startSlot) > maxHoursPerDay) {
       return false;
@@ -160,26 +173,35 @@ class Scheduler {
    * MRV: sort variables by domain size (smallest first)
    */
   orderByMRV(variables, placements) {
-    return variables.map(v => {
-      const domain = this.generateDomain(v);
-      const validDomain = domain.filter(d => this.isConsistent({
-        ...v,
-        day: d.day,
-        startSlot: d.startSlot,
-        endSlot: d.endSlot,
-        roomId: d.roomId,
-        roomName: d.roomName,
-      }, placements));
-      return { variable: v, domainSize: validDomain.length };
-    }).sort((a, b) => a.domainSize - b.domainSize);
+    return variables
+      .map((v) => {
+        const domain = this.generateDomain(v);
+        const validDomain = domain.filter((d) =>
+          this.isConsistent(
+            {
+              ...v,
+              day: d.day,
+              startSlot: d.startSlot,
+              endSlot: d.endSlot,
+              roomId: d.roomId,
+              roomName: d.roomName,
+            },
+            placements
+          )
+        );
+        return { variable: v, domainSize: validDomain.length };
+      })
+      .sort((a, b) => a.domainSize - b.domainSize);
   }
 
   /**
    * Prevent same course from being placed at the same day (spread sessions)
    */
   checkSessionSpread(entry, placements) {
-    const sameCourse = placements.filter(p => p.courseId.toString() === entry.courseId.toString());
-    if (sameCourse.some(p => p.day === entry.day)) {
+    const sameCourse = placements.filter(
+      (p) => p.courseId.toString() === entry.courseId.toString()
+    );
+    if (sameCourse.some((p) => p.day === entry.day)) {
       return false;
     }
     return true;
@@ -230,7 +252,7 @@ class Scheduler {
 
     // Order by MRV
     const ordered = this.orderByMRV(variables, placements);
-    const orderedVars = ordered.map(o => o.variable);
+    const orderedVars = ordered.map((o) => o.variable);
 
     // Try solving with backtracking
     const success = this.solve(orderedVars, placements, 0);
@@ -281,8 +303,9 @@ class Scheduler {
     }
 
     // Compute stats
-    const { activeDays, dayStartHour, dayEndHour, lunchBreakStart, lunchBreakEnd } = this.constraints;
-    const slotsPerDay = (dayEndHour - dayStartHour) - (lunchBreakEnd - lunchBreakStart);
+    const { activeDays, dayStartHour, dayEndHour, lunchBreakStart, lunchBreakEnd } =
+      this.constraints;
+    const slotsPerDay = dayEndHour - dayStartHour - (lunchBreakEnd - lunchBreakStart);
     const totalSlotsAvailable = activeDays.length * slotsPerDay;
     const totalSlotsFilled = this.entries.reduce((sum, e) => sum + (e.endSlot - e.startSlot), 0);
 
@@ -292,7 +315,8 @@ class Scheduler {
       stats: {
         totalSlotsFilled,
         totalSlotsAvailable,
-        utilizationPercent: totalSlotsAvailable > 0 ? Math.round((totalSlotsFilled / totalSlotsAvailable) * 100) : 0,
+        utilizationPercent:
+          totalSlotsAvailable > 0 ? Math.round((totalSlotsFilled / totalSlotsAvailable) * 100) : 0,
         conflictCount: 0,
         coursesPlaced: this.entries.length,
         coursesUnplaced: this.unplaced.length,

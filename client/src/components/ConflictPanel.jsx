@@ -26,17 +26,24 @@ export default function ConflictPanel({ conflicts, suggestions }) {
       <div className="conflict-list">
         {conflicts.map((conflict, idx) => {
           const suggestion = suggestions?.find(
-            s => s.conflict?.entryA?.id === conflict.entryA?.id && s.conflict?.entryB?.id === conflict.entryB?.id
+            (s) =>
+              s.conflict?.entryA?.id === conflict.entryA?.id &&
+              s.conflict?.entryB?.id === conflict.entryB?.id
           );
 
           return (
             <div className="conflict-item" key={idx} style={{ animationDelay: `${idx * 0.1}s` }}>
               <div className="conflict-type">
-                {conflict.type === 'room_double_booking' ? '🏫 Room Double-Booking' :
-                 conflict.type === 'instructor_clash' ? '👤 Instructor Clash' :
-                 conflict.type === 'same_course_overlap' ? '📕 Same Course Overlap' :
-                 '⏰ Time Overlap'}
-                <span className={`badge ${conflict.severity === 'high' ? 'badge-danger' : 'badge-warning'}`}>
+                {conflict.type === 'room_double_booking'
+                  ? '🏫 Room Double-Booking'
+                  : conflict.type === 'instructor_clash'
+                    ? '👤 Instructor Clash'
+                    : conflict.type === 'same_course_overlap'
+                      ? '📕 Same Course Overlap'
+                      : '⏰ Time Overlap'}
+                <span
+                  className={`badge ${conflict.severity === 'high' ? 'badge-danger' : 'badge-warning'}`}
+                >
                   {conflict.severity}
                 </span>
               </div>

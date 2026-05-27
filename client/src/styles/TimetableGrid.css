@@ -66,7 +66,7 @@
   color: var(--text-muted);
   text-align: right;
   border-right: 1px solid var(--glass-border);
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   background: rgba(108, 92, 231, 0.02);
   display: flex;
   align-items: flex-start;
@@ -78,7 +78,7 @@
 .grid-cell {
   min-height: 60px;
   border-right: 1px solid var(--glass-border);
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   padding: 4px;
   position: relative;
   transition: background var(--transition-fast);
@@ -113,14 +113,14 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
   pointer-events: none;
 }
 
 .grid-entry:hover {
   transform: scale(1.03);
   z-index: 5;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .grid-entry-name {
@@ -156,7 +156,7 @@
   );
   min-height: 40px;
   border-right: 1px solid var(--glass-border);
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,7 +194,7 @@
   font-size: 0.8rem;
   color: var(--text-secondary);
   padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .unplaced-item:last-child {

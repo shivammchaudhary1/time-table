@@ -1,23 +1,23 @@
-import "../styles/Footer.css";
+import '../styles/Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     Product: [
-      { label: "Features", href: "#" },
-      { label: "Pricing", href: "#" },
-      { label: "Security", href: "#" },
+      { label: 'Features', href: '#' },
+      { label: 'Pricing', href: '#' },
+      { label: 'Security', href: '#' },
     ],
     Company: [
-      { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
+      { label: 'About', href: '#' },
+      { label: 'Blog', href: '#' },
+      { label: 'Careers', href: '#' },
     ],
     Support: [
-      { label: "Help Center", href: "#" },
-      { label: "Documentation", href: "#" },
-      { label: "Contact", href: "#" },
+      { label: 'Help Center', href: '#' },
+      { label: 'Documentation', href: '#' },
+      { label: 'Contact', href: '#' },
     ],
   };
 
@@ -30,8 +30,7 @@ export default function Footer() {
             <div>
               <div className="footer-title">Smart Timetable</div>
               <p className="footer-description">
-                AI-powered intelligent scheduling solution for educational
-                institutions
+                AI-powered intelligent scheduling solution for educational institutions
               </p>
             </div>
           </div>

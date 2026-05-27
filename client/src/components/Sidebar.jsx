@@ -21,7 +21,11 @@ export default function Sidebar({
       <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`} id="sidebar">
         {/* Add Course Button */}
         <div className="sidebar-section">
-          <button className="btn btn-primary btn-lg generate-btn" onClick={onAddCourse} id="add-course-btn">
+          <button
+            className="btn btn-primary btn-lg generate-btn"
+            onClick={onAddCourse}
+            id="add-course-btn"
+          >
             ➕ Add Course
           </button>
         </div>
@@ -35,7 +39,9 @@ export default function Sidebar({
           {courses.length === 0 ? (
             <div className="empty-state" style={{ padding: '24px 0' }}>
               <div className="empty-state-icon">📖</div>
-              <div className="empty-state-text">No courses yet. Add your first course to get started!</div>
+              <div className="empty-state-text">
+                No courses yet. Add your first course to get started!
+              </div>
             </div>
           ) : (
             <div className="course-list">
@@ -45,7 +51,10 @@ export default function Sidebar({
                   key={course._id}
                   style={{ animationDelay: `${idx * 0.05}s` }}
                 >
-                  <div className="course-color-dot" style={{ backgroundColor: course.color, color: course.color }} />
+                  <div
+                    className="course-color-dot"
+                    style={{ backgroundColor: course.color, color: course.color }}
+                  />
                   <div className="course-info">
                     <div className="course-name">{course.name}</div>
                     <div className="course-meta">
@@ -53,8 +62,20 @@ export default function Sidebar({
                     </div>
                   </div>
                   <div className="course-actions">
-                    <button className="course-action-btn" onClick={() => onEditCourse(course)} title="Edit">✏️</button>
-                    <button className="course-action-btn delete" onClick={() => onDeleteCourse(course._id)} title="Delete">🗑️</button>
+                    <button
+                      className="course-action-btn"
+                      onClick={() => onEditCourse(course)}
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="course-action-btn delete"
+                      onClick={() => onDeleteCourse(course._id)}
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
                   </div>
                 </div>
               ))}
@@ -69,15 +90,27 @@ export default function Sidebar({
             Classrooms ({rooms.length})
           </div>
           <div className="sidebar-actions" style={{ marginBottom: rooms.length > 0 ? 10 : 0 }}>
-            <button className="btn btn-ghost" onClick={onAddRoom} id="add-room-btn" style={{ width: '100%' }}>
+            <button
+              className="btn btn-ghost"
+              onClick={onAddRoom}
+              id="add-room-btn"
+              style={{ width: '100%' }}
+            >
               ➕ Add Room
             </button>
           </div>
           {rooms.length > 0 && (
             <div className="course-list">
               {rooms.map((room, idx) => (
-                <div className="course-card" key={room._id} style={{ animationDelay: `${idx * 0.05}s` }}>
-                  <div className="course-color-dot" style={{ backgroundColor: '#74b9ff', color: '#74b9ff' }} />
+                <div
+                  className="course-card"
+                  key={room._id}
+                  style={{ animationDelay: `${idx * 0.05}s` }}
+                >
+                  <div
+                    className="course-color-dot"
+                    style={{ backgroundColor: '#74b9ff', color: '#74b9ff' }}
+                  />
                   <div className="course-info">
                     <div className="course-name">{room.name}</div>
                     <div className="course-meta">
@@ -85,7 +118,13 @@ export default function Sidebar({
                     </div>
                   </div>
                   <div className="course-actions">
-                    <button className="course-action-btn delete" onClick={() => onDeleteRoom(room._id)} title="Delete">🗑️</button>
+                    <button
+                      className="course-action-btn delete"
+                      onClick={() => onDeleteRoom(room._id)}
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
                   </div>
                 </div>
               ))}
@@ -100,7 +139,12 @@ export default function Sidebar({
             Settings
           </div>
           <div className="sidebar-actions">
-            <button className="btn btn-ghost" onClick={onShowConstraints} id="constraints-btn" style={{ width: '100%' }}>
+            <button
+              className="btn btn-ghost"
+              onClick={onShowConstraints}
+              id="constraints-btn"
+              style={{ width: '100%' }}
+            >
               ⚙️ Configure Constraints
             </button>
           </div>
@@ -129,7 +173,12 @@ export default function Sidebar({
               )}
             </button>
             {hasTimetable && (
-              <button className="btn btn-ghost" onClick={onExport} id="export-btn" style={{ width: '100%' }}>
+              <button
+                className="btn btn-ghost"
+                onClick={onExport}
+                id="export-btn"
+                style={{ width: '100%' }}
+              >
                 📥 Export as PNG
               </button>
             )}

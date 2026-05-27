@@ -1,13 +1,13 @@
-import { useState } from "react";
-import "../styles/Navbar.css";
+import { useState } from 'react';
+import '../styles/Navbar.css';
 
 export default function Navbar({ onShowAuth }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: "Features", href: "#features" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "About", href: "#about" },
+    { label: 'Features', href: '#features' },
+    { label: 'How It Works', href: '#how-it-works' },
+    { label: 'About', href: '#about' },
   ];
 
   return (
@@ -21,7 +21,7 @@ export default function Navbar({ onShowAuth }) {
           </div>
         </div>
 
-        <div className={`navbar-menu ${mobileMenuOpen ? "mobile-open" : ""}`}>
+        <div className={`navbar-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
           <div className="navbar-links">
             {navLinks.map((link, index) => (
               <a key={index} href={link.href} className="nav-link">
@@ -33,7 +33,7 @@ export default function Navbar({ onShowAuth }) {
             <button
               className="btn btn-ghost btn-sm"
               onClick={() => {
-                onShowAuth("login");
+                onShowAuth('login');
                 setMobileMenuOpen(false);
               }}
               id="nav-login-btn"
@@ -43,7 +43,7 @@ export default function Navbar({ onShowAuth }) {
             <button
               className="btn btn-primary btn-sm"
               onClick={() => {
-                onShowAuth("signup");
+                onShowAuth('signup');
                 setMobileMenuOpen(false);
               }}
               id="nav-signup-btn"
@@ -58,7 +58,7 @@ export default function Navbar({ onShowAuth }) {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           id="navbar-toggle"
         >
-          {mobileMenuOpen ? "✕" : "☰"}
+          {mobileMenuOpen ? '✕' : '☰'}
         </button>
       </div>
     </nav>

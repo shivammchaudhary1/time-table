@@ -7,6 +7,7 @@ const envs = {
   jwt_secret: process.env.JWT_SECRET || 'smart-timetable-secret-key-2024',
   node_env: process.env.NODE_ENV || 'development',
   client_url: process.env.CLIENT_URL || 'http://localhost:5173',
+  salt_rounds: parseInt(process.env.SALT_ROUNDS) || 10,
 };
 
 export default envs;
