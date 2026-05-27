@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters long'],
-      select: false, // Never return password in queries by default
+      // select: false, // Never return password in queries by default
     },
     accessToken: {
       type: String,
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: null,
+      default: 'https://res.cloudinary.com/dax6jkbna/image/upload/f_auto,q_auto/avatar_dpr7im',
       match: [/^(https?:\/\/.+)?$/, 'Please provide a valid URL for profile picture'],
     },
     phoneNumber: {

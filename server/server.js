@@ -8,6 +8,7 @@ import connectDB from './config/db.js';
 import envs from './config/envs.js';
 import { appRoutes } from './routes/app.route.js';
 import { limiter } from './utils/limiter.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(morgan('dev')); // 'dev' format shows colorized, concise logs
 app.use(limiter); // Apply rate limiting to all routes
 app.use(cors()); // Enable CORS for all origins (adjust as needed for production)
 app.use(express.json({ limit: '10mb' })); // Limit request body size to 10MB
+app.use(cookieParser()); // Parse cookies for authentication and other purposes
 appRoutes(app); // Register all application routes
 
 // ========== ROUTES ==========
@@ -37,6 +39,7 @@ app.use((err, req, res, next) => {
     message: err.message || 'Internal Server Error',
     error: envs.node_env === 'development' ? err : {}, // Don't expose errors in production
   });
+  next();
 });
 
 app.use((req, res) => {
