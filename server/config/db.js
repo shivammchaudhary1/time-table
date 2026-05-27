@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
+import chalk from 'chalk';
+import envs from './envs.js';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/smart-timetable');
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    const conn = await mongoose.connect(envs.mongo_uri);
+    console.log(chalk.green.bold(`✅ MongoDB Connected: ${conn.connection.host}`));
   } catch (error) {
-    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    console.error(chalk.red.bold(`❌ MongoDB Connection Failed: ${error.message}`));
     process.exit(1);
   }
 };

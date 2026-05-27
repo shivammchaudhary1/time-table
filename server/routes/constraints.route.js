@@ -1,6 +1,6 @@
 import express from 'express';
-import Constraint from '../models/Constraint.js';
-import auth from '../middleware/auth.js';
+import Constraint from '../models/constraint.model.js';
+import auth from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 

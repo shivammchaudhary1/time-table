@@ -1,9 +1,10 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-import { JWT_SECRET } from '../middleware/auth.js';
+import User from '../models/user.model.js';
+import envs from '../config/envs.js';
 
 const router = express.Router();
+const JWT_SECRET = envs.jwt_secret;
 
 const generateToken = (id) => {
   return jwt.sign({ id }, JWT_SECRET, { expiresIn: "7d" });
@@ -11,8 +12,8 @@ const generateToken = (id) => {
 
 const authCookieOptions = {
   httpOnly: true,
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  secure: process.env.NODE_ENV === "production",
+  sameSite: envs.node_env === "production" ? "none" : "lax",
+  secure: envs.node_env === "production",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
