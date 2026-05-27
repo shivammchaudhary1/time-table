@@ -29,11 +29,10 @@ router.post('/', async (req, res) => {
 // PUT update room
 router.put('/:id', async (req, res) => {
   try {
-    const room = await Room.findOneAndUpdate(
-      { _id: req.params.id, userId: req.userId },
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const room = await Room.findOneAndUpdate({ _id: req.params.id, userId: req.userId }, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!room) return res.status(404).json({ error: 'Room not found' });
     res.json(room);
   } catch (err) {

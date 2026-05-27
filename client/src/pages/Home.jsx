@@ -1,12 +1,12 @@
-import { useState, useCallback } from "react";
-import { useOutletContext } from "react-router-dom";
-import LandingPage from "../components/LandingPage";
-import AuthPage from "../components/AuthPage";
+import { useState, useCallback } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import LandingPage from '../components/LandingPage';
+import AuthPage from '../components/AuthPage';
 
 export default function Home() {
   const { onAuth } = useOutletContext();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState("login");
+  const [authMode, setAuthMode] = useState('login');
 
   const handleShowAuth = useCallback((mode) => {
     setAuthMode(mode);
@@ -22,7 +22,7 @@ export default function Home() {
       onAuth(userData);
       handleCloseAuth();
     },
-    [onAuth],
+    [onAuth]
   );
 
   return (
@@ -31,11 +31,7 @@ export default function Home() {
       {showAuthModal && (
         <>
           <div className="modal-overlay" onClick={handleCloseAuth}></div>
-          <AuthPage
-            onAuth={handleAuth}
-            initialMode={authMode}
-            onClose={handleCloseAuth}
-          />
+          <AuthPage onAuth={handleAuth} initialMode={authMode} onClose={handleCloseAuth} />
         </>
       )}
     </>

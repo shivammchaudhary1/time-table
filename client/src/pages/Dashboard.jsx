@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import { useOutletContext } from "react-router-dom";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-import TimetableGrid from "../components/TimetableGrid";
-import ConflictPanel from "../components/ConflictPanel";
-import StatsBar from "../components/StatsBar";
-import CourseForm from "../components/CourseForm";
-import ConstraintForm from "../components/ConstraintForm";
-import RoomForm from "../components/RoomForm";
+import { useState, useEffect, useCallback } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import TimetableGrid from '../components/TimetableGrid';
+import ConflictPanel from '../components/ConflictPanel';
+import StatsBar from '../components/StatsBar';
+import CourseForm from '../components/CourseForm';
+import ConstraintForm from '../components/ConstraintForm';
+import RoomForm from '../components/RoomForm';
 import {
   getCourses,
   createCourse,
@@ -20,8 +20,8 @@ import {
   getRooms,
   createRoom,
   deleteRoom,
-} from "../api/api";
-import "../App.css";
+} from '../api/api';
+import '../App.css';
 
 export default function Dashboard() {
   const { user, onLogout, addToast } = useOutletContext();
@@ -43,13 +43,12 @@ export default function Dashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [coursesRes, constraintsRes, timetableRes, roomsRes] =
-          await Promise.all([
-            getCourses(),
-            getConstraints(),
-            getTimetable(),
-            getRooms(),
-          ]);
+        const [coursesRes, constraintsRes, timetableRes, roomsRes] = await Promise.all([
+          getCourses(),
+          getConstraints(),
+          getTimetable(),
+          getRooms(),
+        ]);
         setCourses(coursesRes.data);
         setConstraints(constraintsRes.data);
         setRooms(roomsRes.data);
@@ -61,7 +60,7 @@ export default function Dashboard() {
         setServerStatus(true);
       } catch (err) {
         setServerStatus(false);
-        addToast("Failed to load data", "error");
+        addToast('Failed to load data', 'error');
       }
     };
     loadData();
@@ -84,20 +83,18 @@ export default function Dashboard() {
       setShowCourseForm(false);
       addToast(`Course "${data.name}" added!`);
     } catch (err) {
-      addToast(err.response?.data?.error || "Failed to add course", "error");
+      addToast(err.response?.data?.error || 'Failed to add course', 'error');
     }
   };
 
   const handleEditCourse = async (data) => {
     try {
       const res = await updateCourse(editingCourse._id, data);
-      setCourses((prev) =>
-        prev.map((c) => (c._id === editingCourse._id ? res.data : c)),
-      );
+      setCourses((prev) => prev.map((c) => (c._id === editingCourse._id ? res.data : c)));
       setEditingCourse(null);
       addToast(`Course "${data.name}" updated!`);
     } catch (err) {
-      addToast(err.response?.data?.error || "Failed to edit course", "error");
+      addToast(err.response?.data?.error || 'Failed to edit course', 'error');
     }
   };
 
@@ -105,9 +102,9 @@ export default function Dashboard() {
     try {
       await deleteCourse(id);
       setCourses((prev) => prev.filter((c) => c._id !== id));
-      addToast("Course deleted");
+      addToast('Course deleted');
     } catch (err) {
-      addToast("Failed to delete course", "error");
+      addToast('Failed to delete course', 'error');
     }
   };
 
@@ -119,7 +116,7 @@ export default function Dashboard() {
       setShowRoomForm(false);
       addToast(`Room "${data.name}" added!`);
     } catch (err) {
-      addToast(err.response?.data?.error || "Failed to add room", "error");
+      addToast(err.response?.data?.error || 'Failed to add room', 'error');
     }
   };
 
@@ -127,9 +124,9 @@ export default function Dashboard() {
     try {
       await deleteRoom(id);
       setRooms((prev) => prev.filter((r) => r._id !== id));
-      addToast("Room deleted");
+      addToast('Room deleted');
     } catch (err) {
-      addToast("Failed to delete room", "error");
+      addToast('Failed to delete room', 'error');
     }
   };
 
@@ -139,19 +136,16 @@ export default function Dashboard() {
       const res = await updateConstraints(data);
       setConstraints(res.data);
       setShowConstraintForm(false);
-      addToast("Constraints updated!");
+      addToast('Constraints updated!');
     } catch (err) {
-      addToast(
-        err.response?.data?.error || "Failed to update constraints",
-        "error",
-      );
+      addToast(err.response?.data?.error || 'Failed to update constraints', 'error');
     }
   };
 
   // Generate timetable
   const handleGenerateTimetable = async () => {
     if (courses.length === 0) {
-      addToast("Add at least one course first", "warning");
+      addToast('Add at least one course first', 'warning');
       return;
     }
     setIsGenerating(true);
@@ -163,16 +157,13 @@ export default function Dashboard() {
       const placed = res.data.timetable?.length || 0;
       const unplaced = res.data.conflicts?.length || 0;
       if (unplaced > 0) {
-        addToast(
-          `Timetable generated — ${placed} placed, ${unplaced} unplaced`,
-          "warning",
-        );
+        addToast(`Timetable generated — ${placed} placed, ${unplaced} unplaced`, 'warning');
       } else {
-        addToast(`Timetable generated! ${placed} sessions placed`, "success");
+        addToast(`Timetable generated! ${placed} sessions placed`, 'success');
         spawnConfetti();
       }
     } catch (err) {
-      addToast(err.response?.data?.error || "Generation failed", "error");
+      addToast(err.response?.data?.error || 'Generation failed', 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -181,38 +172,30 @@ export default function Dashboard() {
   // Export as PNG
   const handleExport = async () => {
     try {
-      const { default: html2canvas } = await import("html2canvas");
-      const el = document.getElementById("timetable-export-area");
+      const { default: html2canvas } = await import('html2canvas');
+      const el = document.getElementById('timetable-export-area');
       if (!el) return;
       const canvas = await html2canvas(el, {
-        backgroundColor: "#f0f2f8",
+        backgroundColor: '#f0f2f8',
         scale: 2,
       });
-      const link = document.createElement("a");
-      link.download = "timetable.png";
+      const link = document.createElement('a');
+      link.download = 'timetable.png';
       link.href = canvas.toDataURL();
       link.click();
-      addToast("Timetable exported as PNG!");
+      addToast('Timetable exported as PNG!');
     } catch {
-      addToast("Export failed", "error");
+      addToast('Export failed', 'error');
     }
   };
 
   // Confetti
   const spawnConfetti = () => {
-    const colors = [
-      "#6c5ce7",
-      "#a855f7",
-      "#00cec9",
-      "#fdcb6e",
-      "#ff6b6b",
-      "#74b9ff",
-    ];
+    const colors = ['#6c5ce7', '#a855f7', '#00cec9', '#fdcb6e', '#ff6b6b', '#74b9ff'];
     for (let i = 0; i < 30; i++) {
-      const el = document.createElement("div");
-      el.className = "confetti-piece";
-      el.style.backgroundColor =
-        colors[Math.floor(Math.random() * colors.length)];
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       el.style.left = `${Math.random() * 100}vw`;
       el.style.top = `${40 + Math.random() * 30}vh`;
       el.style.animationDuration = `${0.8 + Math.random() * 0.6}s`;
@@ -248,20 +231,12 @@ export default function Dashboard() {
       />
 
       <div className="main-content">
-        <Header
-          serverStatus={serverStatus}
-          user={user}
-          onLogout={handleLogout}
-        />
+        <Header serverStatus={serverStatus} user={user} onLogout={handleLogout} />
 
         {timetable && (
           <>
-            <StatsBar
-              timetable={timetable}
-              conflicts={conflicts}
-              suggestions={suggestions}
-            />
-            <div id="timetable-export-area" style={{ marginBottom: "40px" }}>
+            <StatsBar timetable={timetable} conflicts={conflicts} suggestions={suggestions} />
+            <div id="timetable-export-area" style={{ marginBottom: '40px' }}>
               <TimetableGrid timetable={timetable} />
             </div>
             {conflicts.length > 0 && (
@@ -271,10 +246,7 @@ export default function Dashboard() {
         )}
 
         {showCourseForm && (
-          <div
-            className="modal-overlay"
-            onClick={() => setShowCourseForm(false)}
-          >
+          <div className="modal-overlay" onClick={() => setShowCourseForm(false)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <CourseForm
                 course={editingCourse}
@@ -286,10 +258,7 @@ export default function Dashboard() {
         )}
 
         {showConstraintForm && (
-          <div
-            className="modal-overlay"
-            onClick={() => setShowConstraintForm(false)}
-          >
+          <div className="modal-overlay" onClick={() => setShowConstraintForm(false)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <ConstraintForm
                 constraints={constraints}

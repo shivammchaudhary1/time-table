@@ -9,7 +9,10 @@ export default function StatsBar({ stats, coursesCount }) {
         <div className="stat-value">{stats.utilizationPercent}%</div>
         <div className="stat-label">Utilization</div>
         <div className="utilization-bar-bg">
-          <div className="utilization-bar-fill" style={{ width: `${stats.utilizationPercent}%` }}></div>
+          <div
+            className="utilization-bar-fill"
+            style={{ width: `${stats.utilizationPercent}%` }}
+          ></div>
         </div>
       </div>
       <div className="stat-card teal">

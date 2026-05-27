@@ -50,7 +50,9 @@
 }
 
 /* ========== RESET ========== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -62,8 +64,17 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-tertiary) 50%, var(--bg-primary) 100%);
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background: linear-gradient(
+    160deg,
+    var(--bg-primary) 0%,
+    var(--bg-tertiary) 50%,
+    var(--bg-primary) 100%
+  );
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
@@ -114,7 +125,9 @@ body {
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-sm);
-  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  transition:
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .glass-card:hover {
@@ -143,7 +156,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -357,53 +370,109 @@ body {
 
 /* ========== ANIMATIONS ========== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 5px var(--danger-glow); }
-  50% { box-shadow: 0 0 20px var(--danger-glow), 0 0 40px var(--danger-glow); }
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--danger-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 20px var(--danger-glow),
+      0 0 40px var(--danger-glow);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes confetti {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(720deg);
+    opacity: 0;
+  }
 }
 
 @keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {
@@ -424,7 +493,12 @@ body {
 
 /* Shimmer loading skeleton */
 .skeleton {
-  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-hover) 50%,
+    var(--surface) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
@@ -508,7 +582,9 @@ body {
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 500;
-  animation: slideInRight 0.3s ease, fadeIn 0.3s ease;
+  animation:
+    slideInRight 0.3s ease,
+    fadeIn 0.3s ease;
   min-width: 280px;
   box-shadow: var(--shadow-md);
   display: flex;

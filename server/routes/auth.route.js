@@ -7,45 +7,43 @@ const router = express.Router();
 const JWT_SECRET = envs.jwt_secret;
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign({ id }, JWT_SECRET, { expiresIn: '7d' });
 };
 
 const authCookieOptions = {
   httpOnly: true,
-  sameSite: envs.node_env === "production" ? "none" : "lax",
-  secure: envs.node_env === "production",
+  sameSite: envs.node_env === 'production' ? 'none' : 'lax',
+  secure: envs.node_env === 'production',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 const setAuthCookie = (res, token) => {
-  res.cookie("auth_token", token, authCookieOptions);
+  res.cookie('auth_token', token, authCookieOptions);
 };
 
 const clearAuthCookie = (res) => {
-  res.clearCookie("auth_token", {
+  res.clearCookie('auth_token', {
     ...authCookieOptions,
     maxAge: undefined,
   });
 };
 
 // POST /api/auth/register
-router.post("/register", async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
     if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 6 characters" });
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already registered" });
+      return res.status(400).json({ error: 'Email already registered' });
     }
 
     const user = await User.create({ name, email, password });
@@ -62,22 +60,22 @@ router.post("/register", async (req, res) => {
 });
 
 // POST /api/auth/login
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
+      return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const token = generateToken(user._id);
@@ -93,35 +91,34 @@ router.post("/login", async (req, res) => {
 });
 
 // POST /api/auth/logout
-router.post("/logout", (req, res) => {
+router.post('/logout', (req, res) => {
   clearAuthCookie(res);
-  return res.json({ message: "Logged out" });
+  return res.json({ message: 'Logged out' });
 });
 
 // GET /api/auth/me (get current user)
-router.get("/me", async (req, res) => {
+router.get('/me', async (req, res) => {
   try {
-    const cookieHeader = req.headers.cookie || "";
+    const cookieHeader = req.headers.cookie || '';
     const cookieMatch = cookieHeader.match(/(?:^|;\s*)auth_token=([^;]+)/);
     const header = req.headers.authorization;
     const token =
-      cookieMatch?.[1] ||
-      (header && header.startsWith("Bearer ") ? header.split(" ")[1] : null);
+      cookieMatch?.[1] || (header && header.startsWith('Bearer ') ? header.split(' ')[1] : null);
 
     if (!token) {
-      return res.status(401).json({ error: "Not authenticated" });
+      return res.status(401).json({ error: 'Not authenticated' });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(401).json({ error: "User not found" });
+      return res.status(401).json({ error: 'User not found' });
     }
     return res.json({
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (err) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 });
 

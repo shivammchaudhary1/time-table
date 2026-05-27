@@ -39,9 +39,10 @@ router.post('/generate', async (req, res) => {
     res.json({
       timetable,
       conflicts,
-      suggestions: conflicts.length > 0
-        ? ConflictDetector.suggest(conflicts, result.entries, constraint.toObject())
-        : [],
+      suggestions:
+        conflicts.length > 0
+          ? ConflictDetector.suggest(conflicts, result.entries, constraint.toObject())
+          : [],
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -62,9 +63,10 @@ router.get('/', async (req, res) => {
     }
 
     const conflicts = ConflictDetector.detect(timetable.entries);
-    const suggestions = conflicts.length > 0
-      ? ConflictDetector.suggest(conflicts, timetable.entries, constraint.toObject())
-      : [];
+    const suggestions =
+      conflicts.length > 0
+        ? ConflictDetector.suggest(conflicts, timetable.entries, constraint.toObject())
+        : [];
 
     res.json({ timetable, conflicts, suggestions });
   } catch (err) {
@@ -86,7 +88,11 @@ router.get('/conflicts', async (req, res) => {
     }
 
     const conflicts = ConflictDetector.detect(timetable.entries);
-    const suggestions = ConflictDetector.suggest(conflicts, timetable.entries, constraint.toObject());
+    const suggestions = ConflictDetector.suggest(
+      conflicts,
+      timetable.entries,
+      constraint.toObject()
+    );
 
     res.json({ conflicts, suggestions });
   } catch (err) {

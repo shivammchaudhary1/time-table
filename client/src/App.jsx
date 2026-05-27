@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { getMe, logout } from "./api/api";
-import "./App.css";
+import { useState, useEffect, useCallback } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { getMe, logout } from './api/api';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -9,13 +9,10 @@ function App() {
   const [toasts, setToasts] = useState([]);
   const navigate = useNavigate();
 
-  const addToast = useCallback((message, type = "success") => {
+  const addToast = useCallback((message, type = 'success') => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(
-      () => setToasts((prev) => prev.filter((t) => t.id !== id)),
-      3500,
-    );
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3500);
   }, []);
 
   // Verify auth on mount
@@ -37,13 +34,13 @@ function App() {
     if (!authReady) return;
 
     if (!user) {
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
     }
   }, [user, authReady, navigate]);
 
   const handleAuth = (userData) => {
     setUser(userData);
-    navigate("/dashboard", { replace: true });
+    navigate('/dashboard', { replace: true });
   };
 
   const handleLogout = async () => {
@@ -53,7 +50,7 @@ function App() {
       // Ignore errors
     }
     setUser(null);
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   if (!authReady) {
@@ -76,9 +73,9 @@ function App() {
       <div className="toast-container">
         {toasts.map((t) => (
           <div key={t.id} className={`toast toast-${t.type}`}>
-            {t.type === "success" && "✅ "}
-            {t.type === "error" && "❌ "}
-            {t.type === "warning" && "⚠️ "}
+            {t.type === 'success' && '✅ '}
+            {t.type === 'error' && '❌ '}
+            {t.type === 'warning' && '⚠️ '}
             {t.message}
           </div>
         ))}
