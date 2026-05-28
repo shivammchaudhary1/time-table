@@ -17,16 +17,20 @@ function App() {
 
   // Verify auth on mount
   useEffect(() => {
-    getMe()
-      .then((res) => {
+    const checkAuth = async () => {
+      try {
+        const res = await getMe();
         setUser(res.data.user);
-      })
-      .catch(() => {
+      } catch (error) {
+        // User not logged in or token invalid - this is expected
+        console.log('User not authenticated');
         setUser(null);
-      })
-      .finally(() => {
+      } finally {
         setAuthReady(true);
-      });
+      }
+    };
+
+    checkAuth();
   }, []);
 
   // Redirect based on auth status

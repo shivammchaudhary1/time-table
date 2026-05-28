@@ -6,9 +6,6 @@ const getTokenFromRequest = (req) => {
   if (authHeader?.startsWith('Bearer ')) {
     return authHeader.split(' ')[1];
   }
-  if (req.cookies?.refreshToken) {
-    return req.cookies.refreshToken;
-  }
   return null;
 };
 
