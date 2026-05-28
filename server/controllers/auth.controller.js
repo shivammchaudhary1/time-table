@@ -122,7 +122,7 @@ export const refreshAccessToken = async (req, res) => {
 
     const decoded = verifyRefreshToken(refreshToken);
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId).select('+refreshToken');
 
     if (!user || !user.isActive) {
       return res.status(401).json({
