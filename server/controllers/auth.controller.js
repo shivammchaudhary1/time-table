@@ -3,7 +3,6 @@ import { hashPassword, comparePassword } from '../config/lib/bcrypt.js';
 import {
   generateAccessToken,
   generateRefreshToken,
-  verifyAccessToken,
   verifyRefreshToken,
 } from '../config/lib/jwt.js';
 import envs from '../config/envs.js';
@@ -32,7 +31,6 @@ export const register = async (req, res) => {
       password: hashedPassword,
       firstName: firstName.trim(),
       lastName: lastName.trim(),
-      role: 'user',
     });
 
     await newUser.save();
@@ -64,7 +62,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password',
+        message: 'email not found',
       });
     }
 
@@ -72,33 +70,38 @@ export const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid email or password',
+        message: 'Invalid password',
       });
     }
 
-    const accessToken = await generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = await generateRefreshToken({ id: user._id, role: user.role });
+    const accessToken = await generateAccessToken({ userId: user._id, role: user.role });
+    const refreshToken = await generateRefreshToken({ userId: user._id, role: user.role });
+
     user.lastLogin = new Date();
-    user.accessToken = accessToken;
     user.refreshToken = refreshToken;
-    user.accessTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
-    user.refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await user.save();
 
-    res.cookie('accessToken', accessToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: envs.node_env === 'production' ? true : false,
       sameSite: 'strict',
-      maxAge: 60 * 60 * 1000, // 60 minutes
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
     });
 
     res.status(200).json({
       success: true,
       message: 'Login successful',
+      accessToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+      },
     });
   } catch (error) {
-    console.error('Login error:', error);
     res.status(500).json({
       success: false,
       message: `Login failed: ${error.message}`,
@@ -119,7 +122,7 @@ export const refreshAccessToken = async (req, res) => {
 
     const decoded = verifyRefreshToken(refreshToken);
 
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.userId);
 
     if (!user || !user.isActive) {
       return res.status(401).json({
@@ -136,7 +139,7 @@ export const refreshAccessToken = async (req, res) => {
     }
 
     const newAccessToken = generateAccessToken({
-      id: user._id,
+      userId: user._id,
       role: user.role,
     });
 
@@ -148,6 +151,7 @@ export const refreshAccessToken = async (req, res) => {
     return res.status(401).json({
       success: false,
       message: 'Invalid or expired refresh token. Please login again.',
+      error: error.message,
     });
   }
 };
@@ -176,162 +180,3 @@ export const logout = async (req, res) => {
     message: 'Logout successful',
   });
 };
-
-export const changePassword = async (req, res) => {
-  try {
-    const { currentPassword, newPassword } = req.body;
-    const userId = req.user?._id;
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: 'Authentication required',
-      });
-    }
-
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({
-        success: false,
-        message: 'Current and new password are required',
-      });
-    }
-
-    const user = await User.findById(userId).select('+password');
-    const isValid = await user.isPasswordCorrect(currentPassword);
-
-    if (!isValid) {
-      return res.status(401).json({
-        success: false,
-        message: 'Current password is incorrect',
-      });
-    }
-
-    user.password = await hashPassword(newPassword);
-    await user.clearTokens();
-
-    res.json({
-      success: true,
-      message: 'Password changed. Please login again.',
-    });
-  } catch (error) {
-    console.error('Change password error:', error);
-    res.status(500).json({
-      success: false,
-      message: `Failed to change password: ${error.message}`,
-    });
-  }
-};
-
-export const getProfile = async (req, res) => {
-  try {
-    const user = req.user;
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Authentication required',
-      });
-    }
-
-    res.json({
-      success: true,
-      user: user.toJSON(),
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: `Failed to fetch profile: ${error.message}`,
-    });
-  }
-};
-//     const { name, email, password } = req.body;
-
-//     if (!name || !email || !password) {
-//       return res.status(400).json({ error: 'All fields are required' });
-//     }
-
-//     if (password.length < 6) {
-//       return res.status(400).json({ error: 'Password must be at least 6 characters' });
-//     }
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ error: 'Email already registered' });
-//     }
-
-//     const user = await User.create({ name, email, password });
-//     const token = generateToken(user._id);
-//     setAuthCookie(res, token);
-
-//     return res.status(201).json({
-//       token,
-//       user: { id: user._id, name: user.name, email: user.email },
-//     });
-//   } catch (err) {
-//     return res.status(500).json({ error: err.message });
-//   }
-// });
-
-// // POST /api/auth/login
-// router.post('/login', async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     if (!email || !password) {
-//       return res.status(400).json({ error: 'Email and password are required' });
-//     }
-
-//     const user = await User.findOne({ email }).select('+password');
-//     if (!user) {
-//       return res.status(401).json({ error: 'Invalid email or password' });
-//     }
-
-//     const isMatch = await user.comparePassword(password);
-//     if (!isMatch) {
-//       return res.status(401).json({ error: 'Invalid email or password' });
-//     }
-
-//     const token = generateToken(user._id);
-//     setAuthCookie(res, token);
-
-//     return res.json({
-//       token,
-//       user: { id: user._id, name: user.name, email: user.email },
-//     });
-//   } catch (err) {
-//     return res.status(500).json({ error: err.message });
-//   }
-// });
-
-// // POST /api/auth/logout
-// router.post('/logout', (req, res) => {
-//   clearAuthCookie(res);
-//   return res.json({ message: 'Logged out' });
-// });
-
-// // GET /api/auth/me (get current user)
-// router.get('/me', async (req, res) => {
-//   try {
-//     const cookieHeader = req.headers.cookie || '';
-//     const cookieMatch = cookieHeader.match(/(?:^|;\s*)auth_token=([^;]+)/);
-//     const header = req.headers.authorization;
-//     const token =
-//       cookieMatch?.[1] || (header && header.startsWith('Bearer ') ? header.split(' ')[1] : null);
-
-//     if (!token) {
-//       return res.status(401).json({ error: 'Not authenticated' });
-//     }
-
-//     const decoded = jwt.verify(token, JWT_SECRET);
-//     const user = await User.findById(decoded.id);
-//     if (!user) {
-//       return res.status(401).json({ error: 'User not found' });
-//     }
-//     return res.json({
-//       user: { id: user._id, name: user.name, email: user.email },
-//     });
-//   } catch (err) {
-//     return res.status(401).json({ error: 'Invalid token' });
-//   }
-// });
-
-// export default router;
