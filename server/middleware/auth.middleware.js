@@ -36,7 +36,7 @@ const auth = async (req, res, next) => {
       throw error;
     }
 
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.userId);
     if (!user || !user.isActive) {
       return res.status(401).json({
         success: false,
