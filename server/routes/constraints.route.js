@@ -1,38 +1,9 @@
 import express from 'express';
-import Constraint from '../models/constraint.model.js';
-import auth from '../middleware/auth.middleware.js';
+import { getConstraints, updateConstraints } from '../controllers/constraints.controller.js';
 
-const router = express.Router();
+const constraintRouter = express.Router();
 
-router.use(auth);
+constraintRouter.get('/', getConstraints);
+constraintRouter.put('/', updateConstraints);
 
-// GET current constraints for user (create defaults if none exist)
-router.get('/', async (req, res) => {
-  try {
-    let constraint = await Constraint.findOne({ userId: req.userId });
-    if (!constraint) {
-      constraint = await Constraint.create({ userId: req.userId });
-    }
-    res.json(constraint);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// PUT update constraints
-router.put('/', async (req, res) => {
-  try {
-    let constraint = await Constraint.findOne({ userId: req.userId });
-    if (!constraint) {
-      constraint = await Constraint.create({ ...req.body, userId: req.userId });
-    } else {
-      Object.assign(constraint, req.body);
-      await constraint.save();
-    }
-    res.json(constraint);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-export default router;
+export default constraintRouter;

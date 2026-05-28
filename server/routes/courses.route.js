@@ -1,56 +1,17 @@
 import express from 'express';
-import Course from '../models/course.model.js';
-import auth from '../middleware/auth.middleware.js';
+import {
+  getCourses,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+} from '../controllers/courses.controller.js';
 
-const router = express.Router();
+const courseRouter = express.Router();
 
-// All routes require authentication
-router.use(auth);
 
-// GET all courses for current user
-router.get('/', async (req, res) => {
-  try {
-    const courses = await Course.find({ userId: req.userId }).sort({ createdAt: -1 });
-    res.json(courses);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+courseRouter.get('/', getCourses);
+courseRouter.post('/', createCourse);
+courseRouter.put('/:id', updateCourse);
+courseRouter.delete('/:id', deleteCourse);
 
-// POST create course
-router.post('/', async (req, res) => {
-  try {
-    const course = await Course.create({ ...req.body, userId: req.userId });
-    res.status(201).json(course);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// PUT update course
-router.put('/:id', async (req, res) => {
-  try {
-    const course = await Course.findOneAndUpdate(
-      { _id: req.params.id, userId: req.userId },
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!course) return res.status(404).json({ error: 'Course not found' });
-    res.json(course);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// DELETE course
-router.delete('/:id', async (req, res) => {
-  try {
-    const course = await Course.findOneAndDelete({ _id: req.params.id, userId: req.userId });
-    if (!course) return res.status(404).json({ error: 'Course not found' });
-    res.json({ message: 'Course deleted' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-export default router;
+export default courseRouter;
