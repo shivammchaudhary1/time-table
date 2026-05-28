@@ -9,7 +9,6 @@ import auth from '../middleware/auth.middleware.js';
 
 const courseRouter = express.Router();
 
-
 courseRouter.get('/', auth, getCourses);
 courseRouter.post('/', auth, createCourse);
 courseRouter.put('/:id', auth, updateCourse);

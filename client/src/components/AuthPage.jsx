@@ -4,13 +4,13 @@ import '../styles/AuthPage.css';
 
 export default function AuthPage({ onAuth, initialMode = 'login', onClose }) {
   const [isLogin, setIsLogin] = useState(initialMode === 'login');
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsLogin(initialMode === 'login');
-    setForm({ name: '', email: '', password: '' });
+    setForm({ firstName: '', lastName: '', email: '', password: '' });
     setError('');
   }, [initialMode]);
 
@@ -27,11 +27,16 @@ export default function AuthPage({ onAuth, initialMode = 'login', onClose }) {
     try {
       const res = isLogin
         ? await login({ email: form.email, password: form.password })
-        : await register(form);
+        : await register({
+            firstName: form.firstName,
+            lastName: form.lastName,
+            email: form.email,
+            password: form.password,
+          });
 
       onAuth(res.data.user);
     } catch (err) {
-      setError(err.response?.data?.error || 'Something went wrong');
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -57,18 +62,32 @@ export default function AuthPage({ onAuth, initialMode = 'login', onClose }) {
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {!isLogin && (
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
-              <input
-                className="form-input"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="John Doe"
-                required={!isLogin}
-                id="auth-name-input"
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label className="form-label">First Name</label>
+                <input
+                  className="form-input"
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  placeholder="John"
+                  required={!isLogin}
+                  id="auth-firstname-input"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Last Name</label>
+                <input
+                  className="form-input"
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  placeholder="Doe"
+                  required={!isLogin}
+                  id="auth-lastname-input"
+                />
+              </div>
+            </>
           )}
           <div className="form-group">
             <label className="form-label">Email</label>
