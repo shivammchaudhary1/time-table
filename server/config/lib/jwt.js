@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import envs from '../envs.js';
 
-export const generateAccessToken = (payload) => {
+export const generateAccessToken = ({ id, role }) => {
   try {
-    if (!payload || !payload.id) {
+    if (!id) {
       throw new Error('Payload with id is required to generate access token');
     }
 
-    const token = jwt.sign(payload, envs.jwt_access_secret_key, {
+    const token = jwt.sign({ id, role }, envs.jwt_access_secret_key, {
       expiresIn: envs.jwt_access_expiration || '15m',
       algorithm: 'HS256',
     });
@@ -18,13 +18,13 @@ export const generateAccessToken = (payload) => {
   }
 };
 
-export const generateRefreshToken = (payload) => {
+export const generateRefreshToken = ({ id, role }) => {
   try {
-    if (!payload || !payload.id) {
+    if (!id) {
       throw new Error('Payload with id is required to generate refresh token');
     }
 
-    const token = jwt.sign(payload, envs.jwt_refresh_secret_key, {
+    const token = jwt.sign({ id, role }, envs.jwt_refresh_secret_key, {
       expiresIn: envs.jwt_refresh_expiration || '7d',
       algorithm: 'HS256',
     });

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import envs from './envs.js';
+import envs from '../envs.js';
 
 const hashPassword = async (password) => {
   try {

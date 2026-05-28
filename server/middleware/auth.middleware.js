@@ -1,41 +1,79 @@
-import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
-import envs from '../config/envs.js';
-
-const JWT_SECRET = envs.jwt_secret;
+import { verifyAccessToken } from '../config/lib/jwt.js';
 
 const getTokenFromRequest = (req) => {
-  const header = req.headers.authorization;
-  if (header && header.startsWith('Bearer ')) {
-    return header.split(' ')[1];
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    return authHeader.split(' ')[1];
   }
-
-  const cookieHeader = req.headers.cookie || '';
-  const cookieMatch = cookieHeader.match(/(?:^|;\s*)auth_token=([^;]+)/);
-  return cookieMatch?.[1] || null;
+  if (req.cookies?.refreshToken) {
+    return req.cookies.refreshToken;
+  }
+  return null;
 };
 
 const auth = async (req, res, next) => {
   try {
     const token = getTokenFromRequest(req);
     if (!token) {
-      return res.status(401).json({ error: 'Authentication required' });
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required',
+      });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    let decoded;
+    try {
+      decoded = verifyAccessToken(token);
+    } catch (error) {
+      if (error.message === 'Access token has expired') {
+        return res.status(401).json({
+          success: false,
+          message: 'Access token expired. Please refresh.',
+          code: 'TOKEN_EXPIRED',
+        });
+      }
+      throw error;
+    }
 
-    if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+    const user = await User.findById(decoded.id);
+    if (!user || !user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not found or inactive',
+      });
     }
 
     req.user = user;
     req.userId = user._id;
+    req.userRole = user.role;
     next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+  } catch (error) {
+    console.error('Auth error:', error.message);
+    res.status(401).json({
+      success: false,
+      message: 'Invalid or expired token',
+    });
   }
 };
 
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required',
+      });
+    }
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Access denied. Required role: ${allowedRoles.join(' or ')}`,
+      });
+    }
+    next();
+  };
+};
+
 export default auth;
-export { JWT_SECRET };
+export { authorize };
