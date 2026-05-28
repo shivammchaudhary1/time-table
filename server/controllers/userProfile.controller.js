@@ -31,7 +31,8 @@ export const changePassword = async (req, res) => {
     }
 
     user.password = await hashPassword(newPassword);
-    await user.clearTokens();
+    user.refreshToken = null;
+    await user.save();
 
     res.json({
       success: true,

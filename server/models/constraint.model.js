@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { DAYS_OF_WEEK } from '../utils/constant.js';
 
 const constraintSchema = new mongoose.Schema(
   {
@@ -37,7 +38,7 @@ const constraintSchema = new mongoose.Schema(
         {
           day: {
             type: String,
-            enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            enum: DAYS_OF_WEEK,
           },
           hour: { type: Number, min: 8, max: 17 },
         },
@@ -46,7 +47,7 @@ const constraintSchema = new mongoose.Schema(
     },
     activeDays: {
       type: [String],
-      enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      enum: DAYS_OF_WEEK,
       default: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     },
     dayStartHour: {

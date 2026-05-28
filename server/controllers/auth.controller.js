@@ -122,7 +122,7 @@ export const refreshAccessToken = async (req, res) => {
 
     const decoded = verifyRefreshToken(refreshToken);
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId).select('+refreshToken');
 
     if (!user || !user.isActive) {
       return res.status(401).json({
@@ -179,4 +179,32 @@ export const logout = async (req, res) => {
     success: true,
     message: 'Logout successful',
   });
+};
+
+export const getMe = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required',
+      });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to fetch user: ${error.message}`,
+    });
+  }
 };

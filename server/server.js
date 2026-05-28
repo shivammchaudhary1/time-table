@@ -18,7 +18,17 @@ app.use(helmet()); // Set secure HTTP headers (CSP, HSTS, X-Frame-Options, etc.)
 app.use(compression()); // Enable gzip compression for responses 70-80% smaller payloads, faster transfers
 app.use(morgan('dev')); // 'dev' format shows colorized, concise logs
 app.use(limiter); // Apply rate limiting to all routes
-app.use(cors()); // Enable CORS for all origins (adjust as needed for production)
+
+// Configure CORS with credentials support for cookies
+app.use(
+  cors({
+    origin: envs.client_url,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
 app.use(express.json({ limit: '10mb' })); // Limit request body size to 10MB
 app.use(cookieParser()); // Parse cookies for authentication and other purposes
 appRoutes(app); // Register all application routes
